@@ -1,7 +1,11 @@
-// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_unnecessary_containers, deprecated_member_use, unused_field
+// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_unnecessary_containers, deprecated_member_use, unused_field, unused_local_variable, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
+import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddStudentScreen extends StatefulWidget {
   const AddStudentScreen({Key? key}) : super(key: key);
@@ -15,12 +19,11 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   double _screenHeight = 0;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final bool isKeyboardVisible =
-        KeyboardVisibilityProvider.isKeyboardVisible(context);
+    final bool isKeyboardVisible = KeyboardVisibilityController().isVisible;
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -76,8 +79,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textBox("Assign a password", true, Icons.password, false,
-                      false, 1, _passwordController),
+                  textBox("Enter Email", false, Icons.home, false, true, 3,
+                      _emailController),
                 ],
               ),
             ),
@@ -93,8 +96,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textBox("Enter Address", false, Icons.home, false, true, 3,
-                      _addressController),
+                  textBox("Assign a password", true, Icons.password, false,
+                      false, 1, _passwordController),
                 ],
               ),
             ),
@@ -134,6 +137,62 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                             letterSpacing: 1,
                           ),
                         ),
+                        onTap: () {
+                          String name = _nameController.text.trim();
+                          String password = _passwordController.text.trim();
+                          String email = _emailController.text.trim();
+                          String phone = _phoneController.text.trim();
+                          if (name.isNotEmpty &&
+                              email.isNotEmpty &&
+                              password.isNotEmpty &&
+                              phone.isNotEmpty) {
+                            FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            )
+                                .then(
+                              (value) {
+                                CollectionReference collectionRef =
+                                    FirebaseFirestore.instance
+                                        .collection('students');
+                                return collectionRef
+                                    .add({
+                                      'name': name,
+                                      'email': email,
+                                      'phone': phone,
+                                    })
+                                    .then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: fieldText(
+                                              "User added successfully!",
+                                              Colors.white),
+                                        ),
+                                      ),
+                                    )
+                                    .catchError(
+                                      (e) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: fieldText(
+                                              e.toString(), Colors.white),
+                                        ),
+                                      ),
+                                    );
+                              },
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: fieldText(
+                                    "Enter proper details completely",
+                                    Colors.white),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ),
                   ),

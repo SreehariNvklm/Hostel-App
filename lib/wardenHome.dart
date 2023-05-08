@@ -1,7 +1,10 @@
-// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use
+// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable
+
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:attendance_app/addStudent.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WardenHomePage extends StatefulWidget {
   const WardenHomePage({Key? key}) : super(key: key);
@@ -13,6 +16,8 @@ class WardenHomePage extends StatefulWidget {
 class _WardenHomePageState extends State<WardenHomePage> {
   double _screenWidth = 0;
   double _screenHeight = 0;
+  final Stream<QuerySnapshot> students =
+      FirebaseFirestore.instance.collection('students').snapshots();
   @override
   Widget build(BuildContext context) {
     _screenWidth = MediaQuery.of(context).size.width;
@@ -49,75 +54,55 @@ class _WardenHomePageState extends State<WardenHomePage> {
             Container(
               margin: EdgeInsets.all(8.0),
               child: SizedBox(
-                height: _screenHeight / 2,
-                child: ListView(
-                  padding: const EdgeInsets.all(8),
-                  //scrollDirection: Axis.vertical,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: Colors.green,
-                          size: _screenWidth / 6,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            child: fieldText("Name", Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red[700],
-                            ))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: Colors.green,
-                          size: _screenWidth / 6,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            child: fieldText("Name", Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red[700],
-                            ))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: Colors.green,
-                          size: _screenWidth / 6,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            child: fieldText("Name", Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.red[700],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                  height: _screenHeight / 2,
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: students,
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot,
+                      ) {
+                        if (snapshot.hasError) {
+                          return fieldText("Error", Colors.red);
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text('Loading...');
+                        }
+                        final data = snapshot.requireData;
+
+                        return ListView.builder(
+                          itemCount: data.size,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      color: Colors.green,
+                                      size: _screenWidth / 6,
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        child: fieldText(
+                                          data.docs[index]['name'],
+                                          Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red[700],
+                                        ))
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      })),
             ),
           ],
         ),

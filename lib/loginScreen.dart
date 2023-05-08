@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, unused_local_variable, unused_import
+// ignore_for_file: file_names, prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, unused_local_variable, unused_import, avoid_print
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isKeyboardVisible =
-        KeyboardVisibilityProvider.isKeyboardVisible(context);
+    final bool isKeyboardVisible = KeyboardVisibilityController().isVisible;
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
