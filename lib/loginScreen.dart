@@ -1,10 +1,12 @@
 // ignore_for_file: file_names, prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, unused_local_variable, unused_import, avoid_print
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attendance_app/studentHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:attendance_app/wardenHome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   double _screenHeight = 0;
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  final Stream<QuerySnapshot> students =
+      FirebaseFirestore.instance.collection('students').snapshots();
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible = KeyboardVisibilityController().isVisible;
@@ -94,11 +97,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 } else if (password.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: fieldText("Enter a valid password")));
+                } else if (email != 'warden@hostel.com') {
+                  await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: email, password: password)
+                      .then((value) => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StudentHomePage(
+                                text: email,
+                              ),
+                            ),
+                          ))
+                      .catchError(
+                    (e) {
+                      if (e.toString() ==
+                          "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: fieldText(
+                                "No user available. Check whether email id is correct or not!")));
+                      } else if (e.toString() ==
+                          "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: fieldText("Wrong password. Retry again")));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: fieldText(
+                                "Oops! An error occurred. Try Again Later.")));
+                      }
+                    },
+                  );
                 } else {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: email, password: password)
-                      .then((value) => Navigator.pushReplacement(
+                      .then((value) => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => WardenHomePage(),
@@ -120,63 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             content: fieldText(
                                 "Oops! An error occurred. Try Again Later.")));
                       }
-
-                      // print(e.toString());
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: fieldText(e.toString()),
-                      //   ),
-                      // );
                     },
                   );
                 }
               },
-              // onTap: () async {
-              //   String id = _loginController.text.trim();
-              //   String passsword = _passwordController.text.trim();
-
-              //   if (id.isEmpty) {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(
-              //         content: fieldText("Enter a valid Id"),
-              //       ),
-              //     );
-              //   } else if (passsword.isEmpty) {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(
-              //         content: fieldText("Enter a valid password"),
-              //       ),
-              //     );
-              //   } else {
-              //     QuerySnapshot snap = await FirebaseFirestore.instance
-              //         .collection("Warden")
-              //         .where('id', isEqualTo: id)
-              //         .get();
-
-              //     try {
-              //       if (passsword == snap.docs[0]['password']) {
-              //         Navigator.pushReplacement(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => WardenHomePage(),
-              //           ),
-              //         );
-              //       } else {
-              //         ScaffoldMessenger.of(context).showSnackBar(
-              //           SnackBar(
-              //             content: fieldText("Wrong Password!"),
-              //           ),
-              //         );
-              //       }
-              //     } catch (e) {
-              //       ScaffoldMessenger.of(context).showSnackBar(
-              //         SnackBar(
-              //           content: fieldText(e.toString()),
-              //         ),
-              //       );
-              //     }
-              //   }
-              // },
               child: Container(
                 margin: EdgeInsets.only(top: _screenHeight / 40),
                 child: Column(

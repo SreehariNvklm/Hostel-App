@@ -153,17 +153,17 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                             )
                                 .then(
                               (value) {
-                                CollectionReference collectionRef =
-                                    FirebaseFirestore.instance
-                                        .collection('students');
-                                return collectionRef
-                                    .add({
+                                FirebaseFirestore.instance
+                                    .collection('students')
+                                    .doc(email)
+                                    .set({
                                       'name': name,
                                       'email': email,
                                       'phone': phone,
+                                      'payment': true,
                                     })
-                                    .then(
-                                      (value) => ScaffoldMessenger.of(context)
+                                    .whenComplete(
+                                      () => ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
                                           content: fieldText(

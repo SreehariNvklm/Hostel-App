@@ -1,10 +1,13 @@
-// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable
+// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable, unused_import
 
-import 'dart:html';
+import 'package:attendance_app/qr_code_generator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:attendance_app/addStudent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 class WardenHomePage extends StatefulWidget {
   const WardenHomePage({Key? key}) : super(key: key);
@@ -18,10 +21,36 @@ class _WardenHomePageState extends State<WardenHomePage> {
   double _screenHeight = 0;
   final Stream<QuerySnapshot> students =
       FirebaseFirestore.instance.collection('students').snapshots();
+  final TimeOfDay _time = TimeOfDay.now();
+
+  void _selectTime() async {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime(now.year, now.month, now.day);
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _time,
+    ).then((value) => FirebaseFirestore.instance
+            .collection('dates')
+            .doc(date.toString())
+            .update({
+          'time': value!.hour.toString() + value.minute.toString()
+        }).then(
+          (value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return QRGenerator();
+              },
+            ),
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -43,8 +72,29 @@ class _WardenHomePageState extends State<WardenHomePage> {
                       color: Colors.black38, spreadRadius: 0, blurRadius: 10),
                 ],
               ),
-              child: Center(
-                child: titleText("Welcome", Colors.white),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: titleText("Welcome", Colors.white),
+                    ),
+                    flex: 5,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.output_rounded,
+                        color: Colors.white,
+                      ),
+                      onTap: () async {
+                        await FirebaseAuth.instance
+                            .signOut()
+                            .then((value) => Navigator.of(context).pop());
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -54,58 +104,135 @@ class _WardenHomePageState extends State<WardenHomePage> {
             Container(
               margin: EdgeInsets.all(8.0),
               child: SizedBox(
-                  height: _screenHeight / 2,
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: students,
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot,
-                      ) {
-                        if (snapshot.hasError) {
-                          return fieldText("Error", Colors.red);
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text('Loading...');
-                        }
-                        final data = snapshot.requireData;
+                height: _screenHeight / 2,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: students,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot,
+                  ) {
+                    if (snapshot.hasError) {
+                      return fieldText("Error", Colors.red);
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('Loading...');
+                    }
+                    final data = snapshot.requireData;
 
-                        return ListView.builder(
-                          itemCount: data.size,
-                          itemBuilder: (context, index) {
-                            return Column(
+                    return ListView.builder(
+                      itemCount: data.size,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.person,
-                                      color: Colors.green,
-                                      size: _screenWidth / 6,
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.green,
+                                  size: _screenWidth / 6,
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    child: fieldText(
+                                      data.docs[index]['name'],
+                                      Colors.black,
                                     ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        child: fieldText(
-                                          data.docs[index]['name'],
-                                          Colors.black,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: fieldText(
+                                    data.docs[index]['email'],
+                                    Colors.black,
+                                  ),
+                                ),
+
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.monetization_on,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection('students')
+                                        .doc(data.docs[index]['email'])
+                                        .update({'payment': false}).then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: fieldText(
+                                              "Payment info updated to pending status!",
+                                              Colors.white),
                                         ),
                                       ),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: Colors.red[700],
-                                        ))
-                                  ],
+                                    );
+                                  },
                                 ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.monetization_on,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection('students')
+                                        .doc(data.docs[index]['email'])
+                                        .update({'payment': true}).then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: fieldText(
+                                              "Payment info updated to payment done status!",
+                                              Colors.white),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                                // IconButton(
+                                //   onPressed: () async {
+                                //     await FirebaseFirestore.instance.collection('students')
+                                //         .doc(data.docs[index]['email'])
+                                //         .delete()
+                                //         .then((value) => ScaffoldMessenger.of(
+                                //                 context)
+                                //             .showSnackBar(SnackBar(
+                                //                 content: fieldText(
+                                //                     "User deleted succesfully",
+                                //                     Colors.white))))
+                                //         .catchError((e) =>
+                                //             ScaffoldMessenger.of(context)
+                                //                 .showSnackBar(SnackBar(
+                                //                     content: fieldText(
+                                //                         e, Colors.white))));
+                                //   },
+                                // icon: Icon(
+                                //   Icons.delete,
+                                //   color: Colors.red[700],
+                                // ),
+                                // ),
                               ],
-                            );
-                          },
+                            ),
+                          ],
                         );
-                      })),
+                      },
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.green,
+        icon: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        label: fieldText('Create Attendance', Colors.white),
+        onPressed: () {
+          _selectTime();
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -145,11 +272,47 @@ class _WardenHomePageState extends State<WardenHomePage> {
                 label: "Add student",
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
+                icon: GestureDetector(
+                  child: Icon(
+                    Icons.location_on,
+                    color: Colors.white,
+                  ),
+                  onTap: () {
+                    _getCurrentLocation().then(
+                      (value) {
+                        String lat = '${value.latitude}';
+                        String long = '${value.longitude}';
+                        //print('$lat , $long');
+                        CollectionReference collectionRef =
+                            FirebaseFirestore.instance.collection('warden');
+                        return collectionRef
+                            .add({
+                              'latitude': lat,
+                              'longitude': long,
+                            })
+                            .then(
+                              (value) =>
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: fieldText(
+                                      "Location added successfully!",
+                                      Colors.white),
+                                ),
+                              ),
+                            )
+                            .catchError(
+                              (e) => ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      fieldText(e.toString(), Colors.white),
+                                ),
+                              ),
+                            );
+                      },
+                    );
+                  },
                 ),
-                label: "Profile",
+                label: "Add Hostel Location",
               ),
             ],
             backgroundColor: Colors.green,
@@ -157,6 +320,22 @@ class _WardenHomePageState extends State<WardenHomePage> {
         ),
       ),
     );
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+    LocationPermission permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permission not granted');
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permission denied forever. Cannot request for the access.');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 
   Widget titleText(String title, Color colour) {

@@ -8,6 +8,7 @@ import 'package:attendance_app/loginScreen.dart';
 import 'package:attendance_app/addStudent.dart';
 import 'package:attendance_app/wardenHome.dart';
 import 'firebase_options.dart';
+import 'package:attendance_app/studentHome.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
