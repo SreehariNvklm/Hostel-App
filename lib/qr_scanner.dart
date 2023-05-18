@@ -156,15 +156,19 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     );
   }
 
-  Widget buildQRView(BuildContext context) => QRView(
-        key: qrKey,
-        onQRViewCreated: onQRViewCreated,
-        overlay: QrScannerOverlayShape(
-          cutOutSize: _screenWidth * 0.5,
-          borderColor: Colors.white,
-          borderWidth: 10,
-          borderRadius: 20.0,
-          borderLength: 20.0,
+  Widget buildQRView(BuildContext context) => SizedBox(
+        height: _screenHeight * .5,
+        width: _screenWidth * .5,
+        child: QRView(
+          key: qrKey,
+          onQRViewCreated: onQRViewCreated,
+          overlay: QrScannerOverlayShape(
+            cutOutSize: _screenWidth * 0.5,
+            borderColor: Colors.white,
+            borderWidth: 10,
+            borderRadius: 20.0,
+            borderLength: 20.0,
+          ),
         ),
       );
 

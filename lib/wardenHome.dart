@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable, unused_import
 
 import 'package:attendance_app/qr_code_generator.dart';
+import 'package:attendance_app/showAttendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -80,6 +81,19 @@ class _WardenHomePageState extends State<WardenHomePage> {
                       child: titleText("Welcome", Colors.white),
                     ),
                     flex: 5,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.date_range,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                showAttendanceForWarden()));
+                      },
+                    ),
                   ),
                   Expanded(
                     child: GestureDetector(
