@@ -36,15 +36,20 @@ class _showAttendanceForWardenState extends State<showAttendanceForWarden> {
             Container(
               width: _screenWidth,
               height: _screenHeight / 5,
-              alignment: Alignment.center,
-              child: GestureDetector(
-                child: Icon(
-                  Icons.turn_left,
-                  color: Colors.white,
-                ),
-                onTap: () {
+              alignment: Alignment.centerLeft,
+              child: RawMaterialButton(
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
+                elevation: 2.0,
+                fillColor: Colors.white,
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 25.0,
+                  color: Colors.green,
+                ),
+                padding: EdgeInsets.all(15.0),
+                shape: CircleBorder(),
               ),
               decoration: BoxDecoration(
                 color: Colors.green,

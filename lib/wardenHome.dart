@@ -30,12 +30,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: _time,
-    ).then((value) => FirebaseFirestore.instance
-            .collection('dates')
-            .doc(date.toString())
-            .update({
-          'time': value!.hour.toString() + value.minute.toString()
-        }).then(
+    ).then((value) =>
+        FirebaseFirestore.instance.collection('dates').doc(date.toString()).set(
+            {'time': value!.hour.toString() + value.minute.toString()}).then(
           (value) => Navigator.push(
             context,
             MaterialPageRoute(

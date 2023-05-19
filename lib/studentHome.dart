@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable
 
+import 'package:attendance_app/about.dart';
 import 'package:attendance_app/qr_scanner.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,7 +31,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         FirebaseFirestore.instance.collection('students').doc(text).snapshots();
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -52,99 +54,188 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   ),
                 ],
               ),
-              child: Center(
-                child: titleText("Welcome", Colors.white),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: titleText("Welcome", Colors.white),
+                    ),
+                    flex: 5,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.output_rounded,
+                        color: Colors.white,
+                      ),
+                      onTap: () async {
+                        await FirebaseAuth.instance
+                            .signOut()
+                            .then((value) => Navigator.of(context).pop());
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              child: titleText("Profile", Colors.green),
-            ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: _screenHeight / 2,
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: documentReference,
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot,
-                  ) {
-                    if (snapshot.hasError) {
-                      return fieldText("Error", Colors.red);
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text('Loading...');
-                    }
-                    final data = snapshot.requireData;
-                    return ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  fieldText(
-                                    data.get('name'),
-                                    Colors.green,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: _screenHeight / 15,
-                              ),
-                              Row(
-                                children: [
-                                  fieldText(
-                                    text,
-                                    Colors.green,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: _screenHeight / 15,
-                              ),
-                              Row(
-                                children: [
-                                  fieldText(
-                                    data.get('phone'),
-                                    Colors.green,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: _screenHeight / 15,
-                              ),
-                              Row(
-                                children: [
-                                  data.get('payment')
-                                      ? fieldText(
-                                          "No payment is due",
-                                          Colors.green,
-                                        )
-                                      : fieldText(
-                                          "Payment due",
-                                          Colors.red,
-                                        ),
-                                ],
-                              ),
-                              // Row(
-                              //   children: [
-                              //     fieldText(
-                              //       data.docs
-                              //           .indexOf(text as QueryDocumentSnapshot)
-                              //           .toString(),
-                              //       Colors.black,
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: _screenHeight * .85,
+                width: _screenWidth * .8,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(4.0),
+                      child: titleText("Profile", Colors.white),
+                    ),
+                    Icon(
+                      Icons.person_outline_outlined,
+                      weight: 10,
+                      color: Colors.white,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            spreadRadius: 0,
+                            blurRadius: 10,
                           ),
-                        );
-                      },
-                      itemCount: 1,
-                    );
-                  },
+                        ],
+                      ),
+                      margin: EdgeInsets.all(8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: SizedBox(
+                            height: _screenHeight * .5,
+                            child: StreamBuilder<DocumentSnapshot>(
+                              stream: documentReference,
+                              builder: (
+                                BuildContext context,
+                                AsyncSnapshot<DocumentSnapshot> snapshot,
+                              ) {
+                                if (snapshot.hasError) {
+                                  return fieldText("Error", Colors.red);
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return fieldText("Loading", Colors.green);
+                                }
+                                final data = snapshot.requireData;
+                                return ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: _screenHeight / 15,
+                                            ),
+                                            Expanded(
+                                                child: fieldText(
+                                                    'Name: ', Colors.green)),
+                                            Expanded(
+                                              child: fieldText(
+                                                data.get('name'),
+                                                Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: _screenHeight / 15,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: fieldText(
+                                                    'Email: ', Colors.green)),
+                                            Expanded(
+                                              child: fieldText(
+                                                text,
+                                                Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: _screenHeight / 15,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: fieldText(
+                                                    'Phone: ', Colors.green)),
+                                            Expanded(
+                                              child: fieldText(
+                                                data.get('phone'),
+                                                Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: _screenHeight / 15,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            data.get('payment')
+                                                ? titleText(
+                                                    "No payment is due",
+                                                    Colors.green,
+                                                  )
+                                                : titleText(
+                                                    "Payment due",
+                                                    Colors.red,
+                                                  ),
+                                          ],
+                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     fieldText(
+                                        //       data.docs
+                                        //           .indexOf(text as QueryDocumentSnapshot)
+                                        //           .toString(),
+                                        //       Colors.black,
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                      ],
+                                    );
+                                  },
+                                  itemCount: 1,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -168,6 +259,22 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   color: Colors.white,
                 ),
                 label: "Profile",
+              ),
+              BottomNavigationBarItem(
+                icon: GestureDetector(
+                    child: Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutAppPage(),
+                        ),
+                      );
+                    }),
+                label: "About App",
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
