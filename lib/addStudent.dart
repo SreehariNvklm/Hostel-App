@@ -169,6 +169,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                           content: fieldText(
                                               "User added successfully!",
                                               Colors.white),
+                                          behavior: SnackBarBehavior.floating,
+                                          elevation: 6.0,
+                                          backgroundColor: Colors.green,
                                         ),
                                       ),
                                     )
@@ -178,6 +181,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                         SnackBar(
                                           content: fieldText(
                                               e.toString(), Colors.white),
+                                          behavior: SnackBarBehavior.floating,
+                                          elevation: 6.0,
+                                          backgroundColor: Colors.green,
                                         ),
                                       ),
                                     );
@@ -189,6 +195,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                 content: fieldText(
                                     "Enter proper details completely",
                                     Colors.white),
+                                behavior: SnackBarBehavior.floating,
+                                elevation: 6.0,
+                                backgroundColor: Colors.green,
                               ),
                             );
                           }
@@ -241,15 +250,6 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   color: Colors.white,
                 ),
                 label: "Add a student",
-              ),
-              BottomNavigationBarItem(
-                icon: GestureDetector(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),
-                label: "Profile",
               ),
             ],
             backgroundColor: Colors.green,

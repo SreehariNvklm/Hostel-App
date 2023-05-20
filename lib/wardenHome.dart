@@ -173,6 +173,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                           content: fieldText(
                                               "Payment info updated to pending status!",
                                               Colors.white),
+                                          behavior: SnackBarBehavior.floating,
+                                          elevation: 6.0,
+                                          backgroundColor: Colors.green,
                                         ),
                                       ),
                                     );
@@ -194,6 +197,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                           content: fieldText(
                                               "Payment info updated to payment done status!",
                                               Colors.white),
+                                          behavior: SnackBarBehavior.floating,
+                                          elevation: 6.0,
+                                          backgroundColor: Colors.green,
                                         ),
                                       ),
                                     );
@@ -308,6 +314,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                   content: fieldText(
                                       "Location added successfully!",
                                       Colors.white),
+                                  behavior: SnackBarBehavior.floating,
+                                  elevation: 6.0,
+                                  backgroundColor: Colors.green,
                                 ),
                               ),
                             )
@@ -316,6 +325,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                 SnackBar(
                                   content:
                                       fieldText(e.toString(), Colors.white),
+                                  behavior: SnackBarBehavior.floating,
+                                  elevation: 6.0,
+                                  backgroundColor: Colors.green,
                                 ),
                               ),
                             );

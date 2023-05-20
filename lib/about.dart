@@ -24,9 +24,12 @@ class _aboutAppPageState extends State<aboutAppPage> {
         width: _screenWidth,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 45,
+                width: _screenWidth,
+                height: _screenHeight / 5,
                 decoration: const BoxDecoration(
                   color: Colors.green,
                   borderRadius: BorderRadius.only(

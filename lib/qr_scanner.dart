@@ -48,117 +48,153 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     _screenHeight = MediaQuery.of(context).size.height;
     DateTime now = DateTime.now();
     DateTime date = DateTime(now.year, now.month, now.day);
-    return Scaffold(
-      backgroundColor: Colors.green,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: _screenWidth,
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Expanded(child: buildQRView(context)),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(barcode != null
-                        ? 'Result : ${barcode!.code}'
-                        : 'Scan attendance code'),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.green,
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: _screenWidth,
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                Expanded(
+                  Expanded(child: buildQRView(context)),
+                  Expanded(
+                    flex: 1,
                     child: Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (barcode!.code == date.toString()) {
-                        FirebaseFirestore.instance
-                            .collection('dates')
-                            .doc(date.toString())
-                            .snapshots()
-                            .elementAt(0)
-                            .then((value) {
-                          if (int.parse(value.get('time')) >=
-                              TimeOfDay.now().hour.toInt() +
-                                  TimeOfDay.now().minute.toInt()) {
-                            _getCurrentLocation().then(
-                              (value) {
-                                String lat = '${value.latitude}';
-                                String long = '${value.longitude}';
-
-                                FirebaseFirestore.instance
-                                    .collection('warden')
-                                    .get()
-                                    .then(
-                                  (value) async {
-                                    final String fireLat = value.docs[0]
-                                        .get('latitude')
-                                        .toString();
-                                    final String fireLong = value.docs[0]
-                                        .get('longitude')
-                                        .toString();
-
-                                    if (Geolocator.bearingBetween(
-                                                double.parse(lat),
-                                                double.parse(long),
-                                                double.parse(fireLat),
-                                                double.parse(fireLong))
-                                            .abs()
-                                            .toInt() <=
-                                        500) {
-                                      FirebaseFirestore.instance
-                                          .collection('dates')
-                                          .doc(date.toString())
-                                          .update({
-                                        TimeOfDay.now().toString(): text
-                                      }).then((value) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'Attendance marked succefully')));
-                                        Navigator.pop(context);
-                                      }).catchError((e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'An error occured. Try Again Later!')));
-                                      });
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Location does not match')));
-                                    }
-                                  },
-                                );
-                              },
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    'Attendance for this time might have expired or invalid')));
-                          }
-                        });
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Attendance for this date might have expired or invalid')));
-                      }
-                    },
-                    child: Text("Mark Attendance"),
+                      child: Text(barcode != null
+                          ? 'Result : ${barcode!.code}'
+                          : 'Scan attendance code'),
+                    ),
                   ),
-                ))
-              ],
+                  Expanded(
+                      child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (barcode!.code == date.toString()) {
+                          FirebaseFirestore.instance
+                              .collection('dates')
+                              .doc(date.toString())
+                              .snapshots()
+                              .elementAt(0)
+                              .then((value) {
+                            if (int.parse(value.get('time')) >=
+                                TimeOfDay.now().hour.toInt() +
+                                    TimeOfDay.now().minute.toInt()) {
+                              _getCurrentLocation().then(
+                                (value) {
+                                  String lat = '${value.latitude}';
+                                  String long = '${value.longitude}';
+
+                                  FirebaseFirestore.instance
+                                      .collection('warden')
+                                      .get()
+                                      .then(
+                                    (value) async {
+                                      final String fireLat = value.docs[0]
+                                          .get('latitude')
+                                          .toString();
+                                      final String fireLong = value.docs[0]
+                                          .get('longitude')
+                                          .toString();
+
+                                      if (Geolocator.bearingBetween(
+                                                  double.parse(lat),
+                                                  double.parse(long),
+                                                  double.parse(fireLat),
+                                                  double.parse(fireLong))
+                                              .abs()
+                                              .toInt() <=
+                                          500) {
+                                        FirebaseFirestore.instance
+                                            .collection('dates')
+                                            .doc(date.toString())
+                                            .update({
+                                          TimeOfDay.now().toString(): text
+                                        }).then((value) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                'Attendance marked succefully'),
+                                            behavior: SnackBarBehavior.floating,
+                                            elevation: 6.0,
+                                            backgroundColor: Colors.black,
+                                          ));
+                                          Navigator.pop(context);
+                                        }).catchError((e) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                'An error occured. Try Again Later!'),
+                                            behavior: SnackBarBehavior.floating,
+                                            elevation: 6.0,
+                                            backgroundColor: Colors.black,
+                                          ));
+                                        });
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content:
+                                              Text('Location does not match'),
+                                          behavior: SnackBarBehavior.floating,
+                                          elevation: 6.0,
+                                          backgroundColor: Colors.black,
+                                        ));
+                                      }
+                                    },
+                                  );
+                                },
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    'Attendance for this time might have expired or invalid'),
+                                behavior: SnackBarBehavior.floating,
+                                elevation: 6.0,
+                                backgroundColor: Colors.black,
+                              ));
+                            }
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Attendance for this date might have expired or invalid'),
+                            behavior: SnackBarBehavior.floating,
+                            elevation: 6.0,
+                            backgroundColor: Colors.black,
+                          ));
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                          fieldText("Mark attendance", Colors.white)
+                        ],
+                      ),
+                    ),
+                  ))
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget buildQRView(BuildContext context) => SizedBox(
-        height: _screenHeight * .5,
-        width: _screenWidth * .5,
+        height: _screenHeight * .7,
+        width: _screenWidth * .7,
         child: QRView(
           key: qrKey,
           onQRViewCreated: onQRViewCreated,
@@ -197,5 +233,18 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           'Location permission denied forever. Cannot request for the access.');
     }
     return await Geolocator.getCurrentPosition();
+  }
+
+  Widget fieldText(String title, Color colour) {
+    return Container(
+      child: Text(
+        title,
+        style: TextStyle(
+          color: colour,
+          fontSize: _screenWidth / 30,
+          letterSpacing: 1,
+        ),
+      ),
+    );
   }
 }

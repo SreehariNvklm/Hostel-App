@@ -92,11 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 String email = _loginController.text.trim();
                 String password = _passwordController.text.trim();
                 if (email.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: fieldText("Enter a valid email id")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: fieldText("Enter a valid email id"),
+                    behavior: SnackBarBehavior.floating,
+                    elevation: 6.0,
+                    backgroundColor: Colors.green,
+                  ));
                 } else if (password.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: fieldText("Enter a valid password")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: fieldText("Enter a valid password"),
+                    behavior: SnackBarBehavior.floating,
+                    elevation: 6.0,
+                    backgroundColor: Colors.green,
+                  ));
                 } else if (email != 'warden@hostel.com') {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
@@ -114,16 +122,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (e.toString() ==
                           "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText(
-                                "No user available. Check whether email id is correct or not!")));
+                          content: fieldText(
+                              "No user available. Check whether email id is correct or not!"),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       } else if (e.toString() ==
                           "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText("Wrong password. Retry again")));
+                          content: fieldText("Wrong password. Retry again"),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText(
-                                "Oops! An error occurred. Try Again Later.")));
+                          content: fieldText(
+                              "Oops! An error occurred. Try Again Later."),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       }
                     },
                   );
@@ -142,16 +162,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (e.toString() ==
                           "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText(
-                                "No user available. Check whether email id is correct or not!")));
+                          content: fieldText(
+                              "No user available. Check whether email id is correct or not!"),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       } else if (e.toString() ==
                           "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText("Wrong password. Retry again")));
+                          content: fieldText("Wrong password. Retry again"),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: fieldText(
-                                "Oops! An error occurred. Try Again Later.")));
+                          content: fieldText(
+                              "Oops! An error occurred. Try Again Later."),
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 6.0,
+                          backgroundColor: Colors.green,
+                        ));
                       }
                     },
                   );
