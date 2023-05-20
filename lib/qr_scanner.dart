@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable, unused_import, unused_field, prefer_final_fields
+// ignore_for_file: file_names, non_constant_identifier_names, avoid_unnecessary_containers, unused_import, unused_field
 
 import 'dart:io';
 
@@ -56,10 +56,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           children: [
             Container(
               width: _screenWidth,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Expanded(child: buildQRView(context)),
@@ -117,7 +117,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                           TimeOfDay.now().toString(): text
                                         }).then((value) {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                             content: Text(
                                                 'Attendance marked succefully'),
                                             behavior: SnackBarBehavior.floating,
@@ -127,7 +127,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                           Navigator.pop(context);
                                         }).catchError((e) {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                             content: Text(
                                                 'An error occured. Try Again Later!'),
                                             behavior: SnackBarBehavior.floating,
@@ -137,7 +137,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                         });
                                       } else {
                                         ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
+                                            .showSnackBar(const SnackBar(
                                           content:
                                               Text('Location does not match'),
                                           behavior: SnackBarBehavior.floating,
@@ -151,7 +151,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                               );
                             } else {
                               ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
+                                  .showSnackBar(const SnackBar(
                                 content: Text(
                                     'Attendance for this time might have expired or invalid'),
                                 behavior: SnackBarBehavior.floating,
@@ -161,7 +161,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                             }
                           });
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text(
                                 'Attendance for this date might have expired or invalid'),
                             behavior: SnackBarBehavior.floating,
@@ -181,7 +182,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.add,
                               color: Colors.green,
                             ),

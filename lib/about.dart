@@ -66,7 +66,7 @@ class _aboutAppPageState extends State<aboutAppPage> {
               Container(
                 alignment: Alignment.center,
                 height: _screenHeight * .7,
-                width: _screenWidth * .8,
+                width: _screenWidth * .85,
                 margin: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
                   color: Colors.green,
@@ -75,7 +75,7 @@ class _aboutAppPageState extends State<aboutAppPage> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [

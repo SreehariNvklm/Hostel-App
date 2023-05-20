@@ -1,9 +1,8 @@
-// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable, unused_import
+// ignore_for_file: file_names, non_constant_identifier_names, avoid_unnecessary_containers, unused_local_variable
 
 import 'package:attendance_app/qr_code_generator.dart';
 import 'package:attendance_app/showAttendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:attendance_app/addStudent.dart';
@@ -37,7 +36,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
             context,
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return QRGenerator();
+                return const QRGenerator();
               },
             ),
           ),
@@ -60,7 +59,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
               width: _screenWidth,
               height: _screenHeight / 5,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.green,
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(40),
@@ -81,20 +80,20 @@ class _WardenHomePageState extends State<WardenHomePage> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      child: Icon(
+                      child: const Icon(
                         Icons.date_range,
                         color: Colors.white,
                       ),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                showAttendanceForWarden()));
+                                const showAttendanceForWarden()));
                       },
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      child: Icon(
+                      child: const Icon(
                         Icons.output_rounded,
                         color: Colors.white,
                       ),
@@ -109,11 +108,11 @@ class _WardenHomePageState extends State<WardenHomePage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
               child: titleText("Students", Colors.green),
             ),
             Container(
-              margin: EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: _screenHeight / 2,
                 child: StreamBuilder<QuerySnapshot>(
@@ -126,7 +125,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
                       return fieldText("Error", Colors.red);
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text('Loading...');
+                      return const Text('Loading...');
                     }
                     final data = snapshot.requireData;
 
@@ -156,9 +155,8 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                     Colors.black,
                                   ),
                                 ),
-
                                 IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.monetization_on,
                                     color: Colors.red,
                                   ),
@@ -182,7 +180,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.monetization_on,
                                     color: Colors.green,
                                   ),
@@ -205,28 +203,6 @@ class _WardenHomePageState extends State<WardenHomePage> {
                                     );
                                   },
                                 )
-                                // IconButton(
-                                //   onPressed: () async {
-                                //     await FirebaseFirestore.instance.collection('students')
-                                //         .doc(data.docs[index]['email'])
-                                //         .delete()
-                                //         .then((value) => ScaffoldMessenger.of(
-                                //                 context)
-                                //             .showSnackBar(SnackBar(
-                                //                 content: fieldText(
-                                //                     "User deleted succesfully",
-                                //                     Colors.white))))
-                                //         .catchError((e) =>
-                                //             ScaffoldMessenger.of(context)
-                                //                 .showSnackBar(SnackBar(
-                                //                     content: fieldText(
-                                //                         e, Colors.white))));
-                                //   },
-                                // icon: Icon(
-                                //   Icons.delete,
-                                //   color: Colors.red[700],
-                                // ),
-                                // ),
                               ],
                             ),
                           ],
@@ -242,7 +218,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.green,
-        icon: Icon(
+        icon: const Icon(
           Icons.add,
           color: Colors.white,
         ),
@@ -252,19 +228,19 @@ class _WardenHomePageState extends State<WardenHomePage> {
         },
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
             items: [
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.list,
                   color: Colors.blue,
@@ -273,7 +249,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
-                  child: Icon(
+                  child: const Icon(
                     Icons.person_add_alt,
                     color: Colors.white,
                   ),
@@ -281,7 +257,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return AddStudentScreen();
+                        return const AddStudentScreen();
                       },
                     ),
                   ),
@@ -290,7 +266,7 @@ class _WardenHomePageState extends State<WardenHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
-                  child: Icon(
+                  child: const Icon(
                     Icons.location_on,
                     color: Colors.white,
                   ),

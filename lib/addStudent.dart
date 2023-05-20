@@ -1,10 +1,8 @@
-// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_unnecessary_containers, deprecated_member_use, unused_field, unused_local_variable, unused_import
+// ignore_for_file: file_names,   avoid_unnecessary_containers, invalid_return_type_for_catch_error
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
-import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddStudentScreen extends StatefulWidget {
@@ -67,7 +65,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -84,7 +82,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -101,7 +99,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -130,7 +128,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     width: _screenWidth / 1.25,
                     child: Center(
                       child: GestureDetector(
-                        child: Text(
+                        child: const Text(
                           "Add Student",
                           style: TextStyle(
                             color: Colors.white,
@@ -227,13 +225,13 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
@@ -241,7 +239,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: GestureDetector(
-                  child: Icon(
+                  child: const Icon(
                     Icons.list,
                     color: Colors.white,
                   ),
@@ -249,7 +247,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 ),
                 label: " ",
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person_add_alt,
                   color: Colors.blue,
@@ -299,7 +297,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
       bool enableSugg, int maxLine, TextEditingController control) {
     return Container(
       width: _screenWidth / 1.25,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
             Radius.circular(12),
@@ -313,7 +311,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
           ]),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: _screenWidth / 15,
             child: Icon(
               ic,

@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_field, avoid_unnecessary_containers, unused_import
+// ignore_for_file:  unused_field, avoid_unnecessary_containers,
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -26,7 +25,7 @@ class _QRGeneratorState extends State<QRGenerator> {
       resizeToAvoidBottomInset: true,
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +40,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       data: date.toString(),
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      dataModuleStyle: QrDataModuleStyle(
+                      dataModuleStyle: const QrDataModuleStyle(
                           dataModuleShape: QrDataModuleShape.circle),
                     ),
                   ),
@@ -62,7 +61,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                 Container(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_return,
                       color: Colors.white,
                     ),

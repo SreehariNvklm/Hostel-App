@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_print, unused_local_variable
+// ignore_for_file: file_names, non_constant_identifier_names, avoid_unnecessary_containers, unused_local_variable
 
 import 'package:attendance_app/about.dart';
 import 'package:attendance_app/qr_scanner.dart';
@@ -41,7 +41,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
               width: _screenWidth,
               height: _screenHeight / 5,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.green,
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(40),
@@ -65,7 +65,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      child: Icon(
+                      child: const Icon(
                         Icons.output_rounded,
                         color: Colors.white,
                       ),
@@ -88,7 +88,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 decoration: BoxDecoration(
                   color: Colors.green,
                   borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black38,
                       spreadRadius: 0,
@@ -99,10 +99,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(4.0),
                       child: titleText("Profile", Colors.white),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.person_outline_outlined,
                       weight: 10,
                       color: Colors.white,
@@ -112,7 +112,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16.0),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black38,
                             spreadRadius: 0,
@@ -120,7 +120,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           ),
                         ],
                       ),
-                      margin: EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(8.0),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
@@ -214,16 +214,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
                                                   ),
                                           ],
                                         ),
-                                        // Row(
-                                        //   children: [
-                                        //     fieldText(
-                                        //       data.docs
-                                        //           .indexOf(text as QueryDocumentSnapshot)
-                                        //           .toString(),
-                                        //       Colors.black,
-                                        //     ),
-                                        //   ],
-                                        // ),
                                       ],
                                     );
                                   },
@@ -241,19 +231,19 @@ class _StudentHomePageState extends State<StudentHomePage> {
             ),
           ])),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
             items: [
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person,
                   color: Colors.blue,
@@ -262,7 +252,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
-                    child: Icon(
+                    child: const Icon(
                       Icons.qr_code_scanner,
                       color: Colors.white,
                     ),
@@ -280,7 +270,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
-                    child: Icon(
+                    child: const Icon(
                       Icons.info,
                       color: Colors.white,
                     ),
@@ -288,7 +278,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => aboutAppPage(),
+                          builder: (context) => const aboutAppPage(),
                         ),
                       );
                     }),
