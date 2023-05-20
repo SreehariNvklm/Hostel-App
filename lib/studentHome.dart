@@ -256,25 +256,9 @@ class _StudentHomePageState extends State<StudentHomePage> {
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person,
-                  color: Colors.white,
+                  color: Colors.blue,
                 ),
                 label: "Profile",
-              ),
-              BottomNavigationBarItem(
-                icon: GestureDetector(
-                    child: Icon(
-                      Icons.info,
-                      color: Colors.white,
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => aboutAppPage(),
-                        ),
-                      );
-                    }),
-                label: "About App",
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
@@ -293,6 +277,22 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       );
                     }),
                 label: "Scan QR Code",
+              ),
+              BottomNavigationBarItem(
+                icon: GestureDetector(
+                    child: Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => aboutAppPage(),
+                        ),
+                      );
+                    }),
+                label: "Rules",
               ),
             ],
             backgroundColor: Colors.green,

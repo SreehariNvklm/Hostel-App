@@ -170,16 +170,24 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                           ));
                         }
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                          fieldText("Mark attendance", Colors.white)
-                        ],
+                      child: Container(
+                        width: _screenWidth * .6,
+                        height: _screenHeight / 15,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.green,
+                            ),
+                            fieldText("Mark attendance", Colors.green),
+                          ],
+                        ),
                       ),
                     ),
                   ))

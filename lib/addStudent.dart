@@ -162,19 +162,24 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                       'phone': phone,
                                       'payment': true,
                                     })
-                                    .whenComplete(
-                                      () => ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: fieldText(
-                                              "User added successfully!",
-                                              Colors.white),
-                                          behavior: SnackBarBehavior.floating,
-                                          elevation: 6.0,
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      ),
-                                    )
+                                    .then((value) {
+                                      _nameController.text = '';
+                                      _emailController.text = '';
+                                      _passwordController.text = '';
+                                      _phoneController.text = '';
+                                    })
+                                    .whenComplete(() =>
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: fieldText(
+                                                "User added successfully!",
+                                                Colors.white),
+                                            behavior: SnackBarBehavior.floating,
+                                            elevation: 6.0,
+                                            backgroundColor: Colors.green,
+                                          ),
+                                        ))
                                     .catchError(
                                       (e) => ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -242,12 +247,12 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   ),
                   onTap: () => Navigator.pop(context),
                 ),
-                label: "Dashboard",
+                label: " ",
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person_add_alt,
-                  color: Colors.white,
+                  color: Colors.blue,
                 ),
                 label: "Add a student",
               ),

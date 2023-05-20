@@ -115,6 +115,9 @@ class _aboutAppPageState extends State<aboutAppPage> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              )
             ],
           ),
         ),

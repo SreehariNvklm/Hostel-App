@@ -267,9 +267,9 @@ class _WardenHomePageState extends State<WardenHomePage> {
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.list,
-                  color: Colors.white,
+                  color: Colors.blue,
                 ),
-                label: "Dashboard",
+                label: " ",
               ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
