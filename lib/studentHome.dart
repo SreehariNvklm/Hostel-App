@@ -270,7 +270,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutAppPage(),
+                          builder: (context) => aboutAppPage(),
                         ),
                       );
                     }),
