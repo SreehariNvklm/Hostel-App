@@ -29,7 +29,7 @@ class _aboutAppPageState extends State<aboutAppPage> {
             children: [
               Container(
                 width: _screenWidth,
-                height: _screenHeight / 5,
+                height: _screenHeight / 6,
                 decoration: const BoxDecoration(
                   color: Colors.green,
                   borderRadius: BorderRadius.only(
@@ -61,13 +61,13 @@ class _aboutAppPageState extends State<aboutAppPage> {
                 child: titleText('Rules', Colors.green),
               ),
               SizedBox(
-                height: _screenHeight / 15,
+                height: _screenHeight / 35,
               ),
               Container(
                 alignment: Alignment.center,
                 height: _screenHeight * .7,
                 width: _screenWidth * .8,
-                margin: const EdgeInsets.all(5),
+                margin: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
                   color: Colors.green,
                   borderRadius: BorderRadius.all(
@@ -75,10 +75,13 @@ class _aboutAppPageState extends State<aboutAppPage> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        SizedBox(
+                          height: _screenHeight / 60,
+                        ),
                         fieldText("Hello all. ", Colors.white),
                         SizedBox(
                           height: _screenHeight / 60,
@@ -140,8 +143,7 @@ class _aboutAppPageState extends State<aboutAppPage> {
   Widget fieldText(String title, Color colour) {
     return Container(
       margin: EdgeInsets.only(
-        top: _screenHeight / 15,
-        bottom: _screenHeight / 15,
+        bottom: _screenHeight / 25,
       ),
       child: Text(
         title,
