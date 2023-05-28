@@ -2,17 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-class aboutAppPage extends StatefulWidget {
+class aboutAppPage extends StatelessWidget {
   const aboutAppPage({Key? key}) : super(key: key);
 
-  @override
-  State<aboutAppPage> createState() => _aboutAppPageState();
-}
-
-double _screenHeight = 0;
-double _screenWidth = 0;
-
-class _aboutAppPageState extends State<aboutAppPage> {
   @override
   Widget build(BuildContext context) {
     _screenHeight = MediaQuery.of(context).size.height;
@@ -159,3 +151,6 @@ class _aboutAppPageState extends State<aboutAppPage> {
     );
   }
 }
+
+double _screenHeight = 0;
+double _screenWidth = 0;

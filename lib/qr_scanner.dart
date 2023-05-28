@@ -82,73 +82,171 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                               .snapshots()
                               .elementAt(0)
                               .then((value) {
-                            if (int.parse(value.get('time')) >=
-                                TimeOfDay.now().hour.toInt() +
-                                    TimeOfDay.now().minute.toInt()) {
-                              _getCurrentLocation().then(
-                                (value) {
-                                  String lat = '${value.latitude}';
-                                  String long = '${value.longitude}';
+                            if (value.get('time').toString().length == 4) {
+                              if (int.parse(value.get('time')) >=
+                                  int.parse(TimeOfDay.now().hour.toString() +
+                                      TimeOfDay.now().minute.toString())) {
+                                print(int.parse(
+                                    TimeOfDay.now().hour.toString() +
+                                        TimeOfDay.now().minute.toString()));
+                                _getCurrentLocation().then(
+                                  (value) {
+                                    String lat = '${value.latitude}';
+                                    String long = '${value.longitude}';
 
-                                  FirebaseFirestore.instance
-                                      .collection('warden')
-                                      .get()
-                                      .then(
-                                    (value) async {
-                                      final String fireLat = value.docs[0]
-                                          .get('latitude')
-                                          .toString();
-                                      final String fireLong = value.docs[0]
-                                          .get('longitude')
-                                          .toString();
+                                    FirebaseFirestore.instance
+                                        .collection('warden')
+                                        .get()
+                                        .then(
+                                      (value) async {
+                                        final String fireLat = value.docs[0]
+                                            .get('latitude')
+                                            .toString();
+                                        final String fireLong = value.docs[0]
+                                            .get('longitude')
+                                            .toString();
+                                        print(Geolocator.distanceBetween(
+                                                double.parse(lat),
+                                                double.parse(long),
+                                                double.parse(fireLat),
+                                                double.parse(fireLong))
+                                            .abs()
+                                            .toInt());
 
-                                      if (Geolocator.bearingBetween(
-                                                  double.parse(lat),
-                                                  double.parse(long),
-                                                  double.parse(fireLat),
-                                                  double.parse(fireLong))
-                                              .abs()
-                                              .toInt() <=
-                                          500) {
-                                        FirebaseFirestore.instance
-                                            .collection('dates')
-                                            .doc(date.toString())
-                                            .update({
-                                          TimeOfDay.now().toString(): text
-                                        }).then((value) {
+                                        if (Geolocator.distanceBetween(
+                                                    double.parse(lat),
+                                                    double.parse(long),
+                                                    double.parse(fireLat),
+                                                    double.parse(fireLong))
+                                                .abs()
+                                                .toInt() <=
+                                            52400) {
+                                          FirebaseFirestore.instance
+                                              .collection('dates')
+                                              .doc(date.toString())
+                                              .update({
+                                            TimeOfDay.now().toString(): text
+                                          }).then((value) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'Attendance marked succefully'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              elevation: 6.0,
+                                              backgroundColor: Colors.black,
+                                            ));
+                                            Navigator.pop(context);
+                                          }).catchError((e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'An error occured. Try Again Later!'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              elevation: 6.0,
+                                              backgroundColor: Colors.black,
+                                            ));
+                                          });
+                                        } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
-                                            content: Text(
-                                                'Attendance marked succefully'),
+                                            content:
+                                                Text('Location does not match'),
                                             behavior: SnackBarBehavior.floating,
                                             elevation: 6.0,
                                             backgroundColor: Colors.black,
                                           ));
-                                          Navigator.pop(context);
-                                        }).catchError((e) {
+                                        }
+                                      },
+                                    );
+                                  },
+                                );
+                              }
+                            } else if (value.get('time').toString().length ==
+                                3) {
+                              String t = value.get('time').toString() + '0';
+                              print(t);
+                              if (int.parse(t) >=
+                                  int.parse(TimeOfDay.now().hour.toString() +
+                                      TimeOfDay.now().minute.toString())) {
+                                print(int.parse(
+                                    TimeOfDay.now().hour.toString() +
+                                        TimeOfDay.now().minute.toString()));
+                                _getCurrentLocation().then(
+                                  (value) {
+                                    String lat = '${value.latitude}';
+                                    String long = '${value.longitude}';
+
+                                    FirebaseFirestore.instance
+                                        .collection('warden')
+                                        .get()
+                                        .then(
+                                      (value) async {
+                                        final String fireLat = value.docs[0]
+                                            .get('latitude')
+                                            .toString();
+                                        final String fireLong = value.docs[0]
+                                            .get('longitude')
+                                            .toString();
+                                        print(Geolocator.distanceBetween(
+                                                double.parse(lat),
+                                                double.parse(long),
+                                                double.parse(fireLat),
+                                                double.parse(fireLong))
+                                            .abs()
+                                            .toInt());
+
+                                        if (Geolocator.distanceBetween(
+                                                    double.parse(lat),
+                                                    double.parse(long),
+                                                    double.parse(fireLat),
+                                                    double.parse(fireLong))
+                                                .abs()
+                                                .toInt() <=
+                                            52400) {
+                                          FirebaseFirestore.instance
+                                              .collection('dates')
+                                              .doc(date.toString())
+                                              .update({
+                                            TimeOfDay.now().toString(): text
+                                          }).then((value) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'Attendance marked succefully'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              elevation: 6.0,
+                                              backgroundColor: Colors.black,
+                                            ));
+                                            Navigator.pop(context);
+                                          }).catchError((e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'An error occured. Try Again Later!'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              elevation: 6.0,
+                                              backgroundColor: Colors.black,
+                                            ));
+                                          });
+                                        } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
-                                            content: Text(
-                                                'An error occured. Try Again Later!'),
+                                            content:
+                                                Text('Location does not match'),
                                             behavior: SnackBarBehavior.floating,
                                             elevation: 6.0,
                                             backgroundColor: Colors.black,
                                           ));
-                                        });
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content:
-                                              Text('Location does not match'),
-                                          behavior: SnackBarBehavior.floating,
-                                          elevation: 6.0,
-                                          backgroundColor: Colors.black,
-                                        ));
-                                      }
-                                    },
-                                  );
-                                },
-                              );
+                                        }
+                                      },
+                                    );
+                                  },
+                                );
+                              }
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
@@ -241,7 +339,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       return Future.error(
           'Location permission denied forever. Cannot request for the access.');
     }
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
   }
 
   Widget fieldText(String title, Color colour) {

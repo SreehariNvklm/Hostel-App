@@ -16,14 +16,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String? errorMessage = "";
   bool isLogin = true;
   double _screenWidth = 0;
   double _screenHeight = 0;
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final Stream<QuerySnapshot> students =
-      FirebaseFirestore.instance.collection('students').snapshots();
+
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible = KeyboardVisibilityController().isVisible;
