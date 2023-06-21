@@ -61,7 +61,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textBox("Enter student's name", false, Icons.person, false,
-                      true, 2, _nameController),
+                      true, 2, _nameController, TextInputType.name),
                 ],
               ),
             ),
@@ -78,7 +78,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textBox("Enter Email", false, Icons.home, false, true, 3,
-                      _emailController),
+                      _emailController, TextInputType.emailAddress),
                 ],
               ),
             ),
@@ -94,8 +94,15 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textBox("Assign a password", true, Icons.password, false,
-                      false, 1, _passwordController),
+                  textBox(
+                      "Assign a password",
+                      true,
+                      Icons.password,
+                      false,
+                      false,
+                      1,
+                      _passwordController,
+                      TextInputType.visiblePassword),
                 ],
               ),
             ),
@@ -112,7 +119,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textBox("Enter phone number", false, Icons.phone, false,
-                      false, 1, _phoneController)
+                      false, 1, _phoneController, TextInputType.phone)
                 ],
               ),
             ),
@@ -140,7 +147,28 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                           String password = _passwordController.text.trim();
                           String email = _emailController.text.trim();
                           String phone = _phoneController.text.trim();
-                          if (name.isNotEmpty &&
+                          if (password.length < 6 || password.length >= 10) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: fieldText(
+                                    "Minimum password length is 6 and maximum is 10",
+                                    Colors.white),
+                                behavior: SnackBarBehavior.floating,
+                                elevation: 6.0,
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } else if (phone.length != 10) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: fieldText(
+                                    "Type a valid phone number", Colors.white),
+                                behavior: SnackBarBehavior.floating,
+                                elevation: 6.0,
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } else if (name.isNotEmpty &&
                               email.isNotEmpty &&
                               password.isNotEmpty &&
                               phone.isNotEmpty) {
@@ -293,8 +321,15 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     );
   }
 
-  Widget textBox(String hint, bool obscure, IconData ic, bool autoCorr,
-      bool enableSugg, int maxLine, TextEditingController control) {
+  Widget textBox(
+      String hint,
+      bool obscure,
+      IconData ic,
+      bool autoCorr,
+      bool enableSugg,
+      int maxLine,
+      TextEditingController control,
+      TextInputType textType) {
     return Container(
       width: _screenWidth / 1.25,
       decoration: const BoxDecoration(
@@ -320,6 +355,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
           ),
           Expanded(
             child: TextFormField(
+              keyboardType: textType,
               autocorrect: autoCorr,
               enableSuggestions: enableSugg,
               obscureText: obscure,
